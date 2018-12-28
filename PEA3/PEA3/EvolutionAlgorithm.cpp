@@ -4,7 +4,7 @@
 
 EvolutionAlgorithm::EvolutionAlgorithm()
 {
-	stop = 200;
+	stop = 100;
 	mutationMethod = 1;
 }
 
@@ -12,12 +12,17 @@ EvolutionAlgorithm::~EvolutionAlgorithm()
 {
 }
 
+bool compareByWeight(const populationMember &a, const populationMember &b)
+{
+	return a.cost < b.cost;
+}
+
 bool EvolutionAlgorithm::whileCheck()
 {
 	double time = timer.getCounter();
 	if (time >= static_cast<double>(stop))
 		return false;
-	
+
 	return true;
 }
 
@@ -27,14 +32,99 @@ void EvolutionAlgorithm::simulatingEvolution()
 	std::vector<populationMember> startPopulation = generatingStartPopulation();
 	do
 	{
-		for(int i = 0; i < crossing*startPopulationSize; i++)
+		for (int i = 0; i < startPopulation.size(); i++)
 		{
-			
+			if ((rand() % 1000) / 1000.0 < crossing)
+			{
+				int a, b;
+				do
+				{
+					a = rand() % startPopulation.size();
+					b = rand() % startPopulation.size();
+				} while (a == b);
+				startPopulation.push_back(generateCrossing(startPopulation[a], startPopulation[b]));
+			}
+		}
+		int c;
+		for (int i = 0; i < startPopulation.size(); i++)
+			if ((rand() % 1000) / 1000.0 < mutation)
+				switch (mutationMethod)
+				{
+				case 1:
+					c = rand() % startPopulation.size();
+					startPopulation[c] = generateMutationFirstMethod(startPopulation[c]);
+					break;
+				case 2:
+					if (graph.getVertices() > 10)
+					{
+						c = rand() % startPopulation.size();
+						startPopulation[c] = generateMutationSecondMethod(startPopulation[c]);
+					}
+					break;
+				default:
+					break;
+				}
+
+		sort(startPopulation.begin(), startPopulation.end(), compareByWeight);
+
+		while (startPopulation.size() > startPopulationSize)
+		{
+			startPopulation.pop_back();
 		}
 	} while (whileCheck());
 
-	path = permutation;
-	pathCost = minimalCost;
+	path = startPopulation.begin()->path;
+	pathCost = startPopulation.begin()->cost;
+}
+
+populationMember EvolutionAlgorithm::generateCrossing(populationMember firstMember, populationMember secondMember)
+{
+	std::vector<int> crossedMember;
+	int halfSize = graph.getVertices() / 2;
+	bool *visited = new bool[graph.getVertices()];
+	for (int i = 0; i < graph.getVertices(); i++)
+		visited[i] = false;
+	for (int i = 0; i < halfSize; i++)
+	{
+		crossedMember.push_back(firstMember.path[i]);
+		visited[crossedMember[i]] = true;
+	}
+	for (int i = 0; i < secondMember.path.size(); i++)
+	{
+		if (!visited[secondMember.path[i]])
+			crossedMember.push_back(secondMember.path[i]);
+	}
+	delete[] visited;
+	populationMember temp;
+	temp.path = crossedMember;
+	temp.cost = calculatePathCost(temp.path);
+	return temp;
+}
+
+populationMember EvolutionAlgorithm::generateMutationFirstMethod(populationMember member)
+{
+	int a, b;
+	do
+	{
+		a = rand() % graph.getVertices();
+		b = rand() % graph.getVertices();
+	} while (a == b);
+	std::swap(member.path[a], member.path[b]);
+	member.cost = calculatePathCost(member.path);
+	return member;
+}
+
+populationMember EvolutionAlgorithm::generateMutationSecondMethod(populationMember member)
+{
+	int a = rand() % (graph.getVertices() - 7);
+	std::vector<int> mutation;
+	for (int i = a; i < a + 6; i++)
+		mutation.push_back(member.path[i]);
+	random_shuffle(mutation.begin(), mutation.end());
+	for (int i = a, j = 0; i < a + 6; i++, j++)
+		member.path[i] = mutation[j];
+	member.cost = calculatePathCost(member.path);
+	return member;
 }
 
 int EvolutionAlgorithm::calculatePathCost(std::vector<int> permutation)

@@ -25,6 +25,9 @@ public:
 	~EvolutionAlgorithm();
 	bool whileCheck();
 	void simulatingEvolution();
+	populationMember generateCrossing(populationMember firstMember, populationMember secondMember);
+	populationMember generateMutationFirstMethod(populationMember member);
+	populationMember generateMutationSecondMethod(populationMember member);
 	int calculatePathCost(std::vector<int> permutation);
 	std::vector<populationMember> generatingStartPopulation();
 	std::vector<int> generatingPermutation();

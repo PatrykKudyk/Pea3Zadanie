@@ -2,7 +2,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "AnnealingSimulation.h"
 
 
 using namespace std;
@@ -191,8 +190,8 @@ void Menu::mutationMethodChoice()
 {
 	int number;
 	cout << "Jaka metode mutacji chcialbys wybrac?" << endl
-		<< "[1] - Pierwsza metoda - 2 losowe wierzcholki zostaja zamienione miejscami." << endl
-		<< "[2] - Druga metoda - 3 losowe wierzcholki zostaja zamienione miejscami." << endl;
+		<< "[1] - Pierwsza metoda - SWAP." << endl
+		<< "[2] - Druga metoda - SCRAMBLE." << endl;
 	cin >> number;
 	evolution.setMutationMethod(number);
 }
