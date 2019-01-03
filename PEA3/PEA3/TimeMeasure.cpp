@@ -52,3 +52,26 @@ void TimeMeasure::saveToFile(std::vector<double>& czasy, string filename)
 
 	file.close();
 }
+
+void TimeMeasure::saveToFile(std::vector<std::vector<int>>& czasy, std::string filename)
+{
+	ofstream file;
+	file.open(filename, std::ios::out);
+
+	if (file.good())
+	{
+		for (int i = 0; i < czasy.size(); i++)
+		{
+			for (int j = 0; j < czasy[i].size(); j++)
+			{
+				if(j == 0)
+					file << czasy[i][j];
+				else
+					file << " - " << czasy[i][j];
+			}
+			file << endl;
+		}
+	}
+
+	file.close();
+}

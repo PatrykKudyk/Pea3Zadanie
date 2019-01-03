@@ -32,7 +32,8 @@ void EvolutionAlgorithm::simulatingEvolution()
 	std::vector<populationMember> startPopulation = generatingStartPopulation();
 	do
 	{
-		for (int i = 0; i < startPopulation.size(); i++)
+		int end = startPopulation.size();
+		for (int i = 0; i < end; i++)
 		{
 			if ((rand() % 1000) / 1000.0 < crossing)
 			{
