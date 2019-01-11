@@ -24,7 +24,7 @@ void Graph::createGiven(string name, int numberOfVerts)
 	if (plik.good() == true)	//sprawdzam, czy plik otworzyl sie poprawnie
 	{
 		graphReset(); //resetuje graf
-		vertices = numberOfVerts;
+		vertices = numberOfVerts;	//ustawienie wielkoœci grafu na podan¹ jako parametr
 		graph = new long *[vertices];	//tworze tablice wskaznikow, ktorej wielkosc jest rowna ilosci wierzcholkow
 		for (int i = 0; i < vertices; i++)	//tworze wiersze w tablicy wskaznikow, wiersze dlugosci odpowiadajacej ilosci wierzcholkow
 			graph[i] = new long[vertices];
@@ -32,22 +32,22 @@ void Graph::createGiven(string name, int numberOfVerts)
 		for (int i = 0; i < vertices; i++)
 			for (int j = 0; j < vertices; j++)
 				graph[i][j] = 0;		//przypisuje wszystkim komorkom wartosc poczatkowa 0
-		string elo;
-		while (true)
+		string word;		//inicjalizacja stringa do odczytywania danych
+		while (true)	//pêtla nieskoñczona (w pêtli jest warunek wyjœcia)
 		{
-			plik >> elo;
-			if (elo == "EDGE_WEIGHT_SECTION")
+			plik >> word;	//odczytanie fragmentu pliku
+			if (word == "EDGE_WEIGHT_SECTION")	//sprawdzenie czy w pliku rozpoczê³o siê podawanie wierzcho³ków
 			{
-				while (elo != "EOF") {
+				while (word != "EOF") {	//pêtla odczytuj¹ca wierzcho³ki tak d³ugo jak s¹ podawane
 					for (int i = 0; i < vertices; i++)
 					{
-						plik >> elo;
-						if (elo != "EOF")
+						plik >> word;	//odczytanie fragmentu pliku
+						if (word != "EOF")	//sprawdzenie, czy nie jest to "EOF" - wystêpuje na koñcu pliku
 						{
-							istringstream iss(elo);
-							iss >> graph[counter][i];
+							istringstream iss(word);	//konwersja string na inta
+							iss >> graph[counter][i];	//przypisanie wartoœci odczytanej do odpowiedniej komórki tablicy
 							if (counter == i)
-								graph[counter][i] = 100000000;
+								graph[counter][i] = 100000000;	//ustawienie wartoœci 100000000 na przek¹tnej macierzy (tablicy)
 						}
 					}
 					counter++;	//zwiêkszam numer wiersza

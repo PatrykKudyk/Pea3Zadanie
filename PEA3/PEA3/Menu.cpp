@@ -22,52 +22,56 @@ void Menu::mainMenu()
 	do {
 		system("cls");
 		cout << "[1] Wczytaj dane z pliku." << endl
-			<< "[2] Wprowadz kryterium stopu." << endl
-			<< "[3] Ustawienie wielkosci populacji poczatkowej." << endl
-			<< "[4] Ustawienie wspolczynnika mutacji." << endl
-			<< "[5] Ustawienie wspolczynnika krzyzowania." << endl
-			<< "[6] Wybor metody mutacji." << endl
-			<< "[7] Wykonanie algorytmu dla podanych parametrow." << endl
+			<< "[2] Wprowadz kryterium stopu.\t[Aktualne]: " << evolution.getStop() << endl		//
+			<< "[3] Ustawienie wielkosci populacji poczatkowej.\t[Aktualne]: " << evolution.getStartPopulation() << endl
+			<< "[4] Ustawienie wspolczynnika mutacji.\t[Aktualne]: " << evolution.getMutation() << endl
+			<< "[5] Ustawienie wspolczynnika krzyzowania.\t[Aktualne]: " << evolution.getCrossing() << endl
+			<< "[6] Wybor metody mutacji.\t[Aktualne]: ";
+		if (evolution.getMutationMethod() == 1)
+			cout << "Swap";
+		else
+			cout << "Scrambling";
+			cout << endl << "[7] Wykonanie algorytmu dla podanych parametrow." << endl
 			<< "[8] Wyjscie z programu" << endl;
 		cin >> choise;
 		switch (choise)
 		{
 		case 1:
 			system("cls");
-			fileChoice();
+			fileChoice();	//wywo³anie metody z wyborem pliku
 			break;
 		case 2:
 			system("cls");
-			autoStopSetting();
+			autoStopSetting();	//wywo³anie metody z ustawianiem kryterium stopu
 			break;
 		case 3:
 			system("cls");
-			startPopulationSetting();
+			startPopulationSetting();	//wywo³anie metody z ustawianiem wielkoœci populacji startowej
 			break;
 		case 4:
 			system("cls");
-			mutationSetting();
+			mutationSetting();	//wywo³anie metody z wyborem metody mutacji
 			break;
 		case 5:
 			system("cls");
-			crossingSetting();
+			crossingSetting();	//wywo³anie metody z ustawianiem wspó³czynnika krzy¿owania
 			break;
 		case 6:
 			system("cls");
-			mutationMethodChoice();
+			mutationMethodChoice();		//wywo³anie metody z ustawianiem wspó³czynnika mutacji
 			break;
 		case 7:
 			system("cls");
-			evolution.setGraph(graph);
-			if (graph.getVertices() != 0)
-				if (evolution.getMutation() != NULL)
+			evolution.setGraph(graph);	//przypisanie wczytanego grafu do obiektu klasy odpowiedzialnej za przeprowadzenie Symulacji
+			if (graph.getVertices() != 0)	//sprawdzenie, czy graf nie jest pusty
+				if (evolution.getMutation() != NULL)	//sprawdzenie czy ustawiony zosta³ wspó³czynnik mutacji
 				{
-					if (evolution.getCrossing() != NULL)
+					if (evolution.getCrossing() != NULL)	//sprawdzenie czy ustawiony zosta³ wspó³czynnik krzy¿owania
 					{
-						if (evolution.getStartPopulation() != NULL)
+						if (evolution.getStartPopulation() != NULL)	//sprawdzenie czy ustawiona zosta³a wielkoœæ populacji startowej
 						{
-							evolution.simulatingEvolution();
-							displayHamilton(evolution.getPathCost(), evolution.getPath());
+							evolution.simulatingEvolution();	//wywo³anie metody odpowiedzialnej za przeprowadzenie symulacji
+							displayHamilton(evolution.getPathCost(), evolution.getPath());	//wyœwietlenie wyników symulacji
 							cin.get();
 							cin.get();
 						}
@@ -131,8 +135,7 @@ void Menu::fileChoice()
 	cout << "Jaki plik chcialbys otworzyc?" << endl
 		<< "[1] ftv47.atsp" << endl
 		<< "[2] ftv170.atsp" << endl
-		<< "[3] rbg403.atsp" << endl
-		<< "[4] tsp_15.txt" << endl;
+		<< "[3] rbg403.atsp" << endl;
 	cin >> choise;
 	switch (choise)
 	{
@@ -144,9 +147,6 @@ void Menu::fileChoice()
 		break;
 	case 3:
 		graph.createGiven("rbg403.atsp", 403);
-		break;
-	case 4:
-		graph.createGiven("tsp_15.txt");
 		break;
 	default:
 		break;

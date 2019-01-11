@@ -8,7 +8,7 @@ using namespace std;
 
 TimeMeasure::TimeMeasure()
 {
-	PCFreq = 0.0;
+	PCFreq = 0.0;	
 	CounterStart = 0;
 }
 
@@ -30,7 +30,7 @@ void TimeMeasure::startCounting()
 	if (!QueryPerformanceFrequency(&li))
 		std::cout << "QueryPerformanceFrequency failed!\n";
 
-	PCFreq = double(li.QuadPart);// / 1000000.0;
+	PCFreq = double(li.QuadPart);
 
 	QueryPerformanceCounter(&li);
 	CounterStart = li.QuadPart;
@@ -39,7 +39,6 @@ void TimeMeasure::startCounting()
 void TimeMeasure::saveToFile(std::vector<double>& czasy, string filename)
 {
 	ofstream file;
-	//const std::string filename;
 	file.open(filename, std::ios::out);
 
 	if (file.good())
